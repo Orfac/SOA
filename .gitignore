@@ -1,0 +1,10 @@
+**/.idea/**
+**/target/**
+**.iml
+/certs
+mvnw**
+**.jar
+**.p12
+**/node_modules/**
+/lab1-front/build
+**/out/**

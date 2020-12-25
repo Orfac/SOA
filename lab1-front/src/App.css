@@ -1,0 +1,73 @@
+.App {
+  text-align: center;
+}
+.mode-selection{
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.mode{
+  padding: 10px;
+  font-size: 30px;
+  background: #ecf8fd;
+
+  border-radius: 10px;
+}
+.mode:hover{
+  cursor: pointer;
+  border-radius: 10px;
+  box-shadow: 2px 2px 5px 2px cornflowerblue;
+  transform: scale(1.2);
+  transition: ease-in-out 0.2s;
+  font-size: 35px;
+}
+
+.mode-dlc{
+  padding: 15px;
+  font-size: 35px;
+  background: #3cb4e3;
+
+  border-radius: 10px;
+}
+
+.error-message{
+  color: red;
+  font-size: 30px;
+  padding: 10px;
+}
+
+.little-error-message{
+  color: red;
+  font-size: 15px;
+  padding: 10px;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+.success{
+  color: #99f17e;
+}
+.delete{
+  background-color: #f65e5e;
+  color: white;
+}
+.delete:hover{
+  background-color: #f12222;
+  color: white;
+  cursor: pointer;
+}
+.flex{
+  display: flex;
+}
+.margin{
+  margin-top: 30px;
+}

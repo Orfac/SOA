@@ -1,0 +1,1 @@
+scp /home/arseniy/dev/itmo/soa/lab2-spring/target/lab2-spring-0.0.1-SNAPSHOT.war helios:jetty/jetty-distribution-9.4.32.v20200930/webapps
