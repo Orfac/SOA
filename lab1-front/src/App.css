@@ -71,3 +71,20 @@
 .margin{
   margin-top: 30px;
 }
+.ship{
+  width: 300px;
+}
+.cool-button{
+  padding: 15px;
+  font-size: 25px;
+  border-radius: 15px;
+  background: #d9face;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.cool-button:hover{
+  background: #99f17e;
+  color: white;
+}
+

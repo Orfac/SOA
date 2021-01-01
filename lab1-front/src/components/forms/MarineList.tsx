@@ -2,11 +2,14 @@ import React, {useState} from 'react';
 import SpaceMarine from "../SpaceMarine";
 import Config from '../../api/Config.json';
 import './FormStyle.css';
-import {getMarines, handleXml, save} from "../../api/utils";
+import {getMarines, save} from "../../api/marines-api";
+import {handleXml} from "../../utils/MarineXmlExtensions";
+import {ISpaceMarine} from "../../model/ISpaceMarine";
 
-const MarineList = () => {
-    let url = Config.Url + "/marines";
-    const [marines, setMarines] = useState([]);
+
+const MarineList: React.FC = () => {
+    const url = Config.Url + "/marines";
+    const [marines, setMarines] = useState<ISpaceMarine[]>([]);
     const [pageSize, setPageSize] = useState("");
     const [pageNumber, setPageNumber] = useState("");
     const [message, setMessage] = useState("");
@@ -17,20 +20,18 @@ const MarineList = () => {
     const [filter, setFilter] = useState("");
     const [sort, setSort] = useState("");
 
-    const renderMarines = () => {
-        return marines.map(
-            (marine) => <SpaceMarine marine={marine} callForUpdate={reUpdateMarines}/>
-        )
+
+    const renderMarines = (): JSX.Element[] => {
+        return marines.map((value: ISpaceMarine, index: number): JSX.Element =>
+            <SpaceMarine key={index} marine={value} callForUpdate={reUpdateMarines}/>
+        );
     }
 
     const reUpdateMarines = async () => {
         await updateMarines();
     }
 
-    const updateMarines = async () => {
-        setMessage("");
-        setIsError(false);
-        setAddOpen(false);
+    function buildUrl() {
         let finalUrl = url + "?";
         if (pageSize && pageNumber) {
             finalUrl += "&pageNumber=" + pageNumber + "&pageSize=" + pageSize
@@ -41,25 +42,40 @@ const MarineList = () => {
         if (sort) {
             finalUrl += "&sortBy=" + sort;
         }
-        let updatedMarinesResponse = await getMarines(finalUrl);
-        let updatedMarines = [];
-        let responseText = await updatedMarinesResponse.text();
+        return finalUrl;
+    }
+
+    const updateMarines = async () => {
+        setMessage("");
+        setIsError(false);
+        setAddOpen(false);
+
+        const url = buildUrl()
+        const updatedMarinesResponse = await getMarines(url);
+        let updatedMarines: Array<ISpaceMarine> = [];
+        const responseText = await updatedMarinesResponse.text();
         if (updatedMarinesResponse.status === 200) {
-            updatedMarines = await handleXml(responseText);
+            updatedMarines = handleXml(responseText);
             if (updatedMarines.length < 1) {
-                setIsError(true);
-                setMessage("There are 0 space marines");
+                onError("There are 0 space marines");
             }
         } else {
-            setIsError(true);
-            setMessage(responseText);
+            onError(message);
         }
 
         setMarines(updatedMarines);
     }
+    const onError = (message: string) => {
+        setIsError(true);
+        setMessage(message);
+    }
 
-    const inputPageSize = event => setPageSize(event.currentTarget.value);
-    const inputPageNumber = event => setPageNumber(event.currentTarget.value);
+    const inputPageSize = (event: React.FormEvent<HTMLInputElement>) => setPageSize(event.currentTarget.value);
+    const inputPageNumber = (event: React.FormEvent<HTMLInputElement>) => setPageNumber(event.currentTarget.value);
+    const inputSort = (event: React.FormEvent<HTMLInputElement>) => setSort(event.currentTarget.value);
+    const inputFilter = (event: React.FormEvent<HTMLInputElement>) => setFilter(event.currentTarget.value);
+    const updateNew = (event: React.FormEvent<HTMLTextAreaElement>) => setAddValue(event.currentTarget.value);
+
     const openAdd = () => {
         setAddOpen(!isAddOpen);
 
@@ -70,23 +86,20 @@ const MarineList = () => {
         setIsError(false);
         setMessage("");
     };
-    const updateNew = event => setAddValue(event.target.value);
     const sendNew = async () => {
         setMessage("");
         setIsError(false);
-        let rawResponse = await save(addValue);
+        const rawResponse = await save(addValue);
         if (rawResponse.status === 201) {
             setMessage("New marine added!");
         } else {
             if (rawResponse.status === 400) {
                 setIsError(true);
-                let response = await rawResponse.text();
+                const response = await rawResponse.text();
                 setMessage(response ? response : "Cannot add this marine, please rewrite it in xml style");
             }
         }
     }
-    const inputSort = event => setSort(event.target.value);
-    const inputFilter = event => setFilter(event.target.value);
 
     return (
         <div className="form-container">
@@ -123,7 +136,7 @@ const MarineList = () => {
                 {isAddOpen ? <div>
                     <h2>XML view</h2>
 
-                    <textarea cols="60" rows="20" onChange={updateNew}/>
+                    <textarea cols={60} rows={20} onChange={updateNew}/>
                     <div>
                         <button className="cool-button" onClick={sendNew}>
                             Load new marine
@@ -132,7 +145,7 @@ const MarineList = () => {
                 </div> : renderMarines()}
             </div>
 
-            {message ? <div className={isError?"error-message":"success"}>{message}</div> : ""}
+            {message ? <div className={isError ? "error-message" : "success"}>{message}</div> : ""}
 
 
         </div>

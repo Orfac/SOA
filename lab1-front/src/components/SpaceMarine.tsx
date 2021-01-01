@@ -1,16 +1,25 @@
 import React, {useState} from 'react';
 import './SpaceMarine.scss';
-import {deleteById, updateById} from "../api/utils";
+import {deleteById, updateById} from "../api/marines-api";
+import {ISpaceMarine} from "../model/ISpaceMarine";
 
-const SpaceMarine = ({marine, callForUpdate}) => {
-    let chapter = marine.chapter;
+interface IProps {
+    marine: ISpaceMarine,
+    callForUpdate: () => Promise<void>
+}
+
+const SpaceMarine: React.FC<IProps> = (props: IProps) => {
+    const marine = props.marine
+    const callForUpdate = props.callForUpdate
+
+    const chapter = marine.chapter;
 
     const [isEditOpen, setEditOpen] = useState(false);
     const [updateValue, setUpdateValue] = useState(marine.xmlText);
     const [error, setError] = useState("");
 
-    function updateXml(event) {
-        setUpdateValue(event.target.value);
+    function updateXml(event: React.ChangeEvent<HTMLTextAreaElement>) {
+        setUpdateValue(event.currentTarget.value);
     }
 
     const sendDelete = async () => {
@@ -25,7 +34,7 @@ const SpaceMarine = ({marine, callForUpdate}) => {
     const sendUpdate = async () => {
         setEditOpen(!isEditOpen);
         setError("");
-        let response = await updateById(marine.id, updateValue);
+        const response = await updateById(marine.id, updateValue);
         if (response.status >= 400) {
             setError("Error occurred: " + await response.text());
         } else {
@@ -52,19 +61,22 @@ const SpaceMarine = ({marine, callForUpdate}) => {
                 <div className="xml-edit">
                     <h2>XML view</h2>
 
-                    <textarea cols="60" rows="20" onChange={updateXml} defaultValue={updateValue}/>
+                    <textarea cols={60} rows={20} onChange={updateXml} defaultValue={updateValue}/>
                     <button className="cool-button" onClick={sendUpdate}>
                         Update {marine.name}
                     </button>
                 </div> :
                 <div className="info-container">
-                    <div className="chapter-info">
-                        <h2>Chapter</h2>
-                        <div>chapter = {chapter.name}</div>
-                        <div>parent legion = {chapter.parentLegion}</div>
-                        <div>marines count = {chapter.marinesCount}</div>
-                        <div>world = {chapter.world}</div>
-                    </div>
+                    {chapter !== null ? <div className="chapter-info">
+                            <h2>Chapter</h2>
+                            <div>chapter = {chapter.name}</div>
+                            <div>parent legion = {chapter.parentLegion}</div>
+                            <div>marines count = {chapter.marinesCount}</div>
+                            <div>world = {chapter.world}</div>
+                        </div> :
+                        <div className="chapter-info">
+                            Chapter is missing
+                        </div>}
                     <div className="main-info">
                         <h2>Main</h2>
 

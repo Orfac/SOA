@@ -8,3 +8,5 @@ mvnw**
 **/node_modules/**
 /lab1-front/build
 **/out/**
+/lab1_back/**
+

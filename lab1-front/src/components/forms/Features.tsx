@@ -1,13 +1,14 @@
-import React, {Component, useState} from 'react';
+import React, {useState} from 'react';
 import SpaceMarine from "../SpaceMarine";
 import Config from "../../api/Config.json";
-import {handleXml} from "../../api/utils";
+import { handleXml } from '../../utils/MarineXmlExtensions';
+import { ISpaceMarine } from '../../model/ISpaceMarine';
 
 const Features = () => {
 
     const [summaryHealth, setSummaryHealth] = useState("");
     const [Category, setCategory] = useState("");
-    const [marines, setMarines] = useState([]);
+    const [marines, setMarines] = useState<ISpaceMarine[]>([]);
     const [healthAmount, setHealthAmount] = useState("");
 
     const getSummaryHealth = async () => {
@@ -29,7 +30,7 @@ const Features = () => {
             method: "GET"
         });
         if (response.status === 200){
-            let updatedMarines = [];
+            let updatedMarines : Array<ISpaceMarine> = [];
             let responseText = await response.text();
             if (response.status === 200) {
                 updatedMarines = await handleXml(responseText);
@@ -39,11 +40,11 @@ const Features = () => {
         }
     }
 
-    const changeHealth = (event) => {
-        setHealthAmount(event.target.value);
+    const changeHealth = (event : React.FormEvent<HTMLInputElement>) => {
+        setHealthAmount(event.currentTarget.value);
     }
-    function changeCategory(event) {
-        setCategory(event.target.value);
+    function changeCategory(event : React.FormEvent<HTMLInputElement>) {
+        setCategory(event.currentTarget.value);
     }
 
     async function deleteMarine() {
