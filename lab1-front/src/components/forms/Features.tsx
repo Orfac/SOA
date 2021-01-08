@@ -12,26 +12,27 @@ const Features = () => {
     const [healthAmount, setHealthAmount] = useState("");
 
     const getSummaryHealth = async () => {
-        let url = Config.Url + "/health";
-        let response =  await fetch(url, {
+        const url = Config.Url + "/health";
+        const response =  await fetch(url, {
             method: "GET"
         });
         setSummaryHealth(await response.text());
     }
     const renderMarines = () => {
         return marines.map(
-            (marine) => <SpaceMarine marine={marine} callForUpdate={getMarines}/>
+            // eslint-disable-next-line react/jsx-key
+            (marine) => <SpaceMarine marine={marine} callForUpdate={getMarines} />
         )
     }
 
     const getMarines = async () => {
-        let url = Config.Url + "/compare/" + healthAmount;
-        let response =  await fetch(url, {
+        const url = Config.Url + "/compare/" + healthAmount;
+        const response =  await fetch(url, {
             method: "GET"
         });
         if (response.status === 200){
             let updatedMarines : Array<ISpaceMarine> = [];
-            let responseText = await response.text();
+            const responseText = await response.text();
             if (response.status === 200) {
                 updatedMarines = await handleXml(responseText);
             }
@@ -48,8 +49,8 @@ const Features = () => {
     }
 
     async function deleteMarine() {
-        let url = Config.Url + "/random/" + Category;
-        let response =  await fetch(url, {
+        const url = Config.Url + "/random/" + Category;
+        const response =  await fetch(url, {
             method: "DELETE"
         });
     }

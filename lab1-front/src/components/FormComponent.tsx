@@ -1,6 +1,9 @@
-const FormComponent : React.FC = () => {
+const FormComponent : React.FC = (props) => {
+    
     return (
-        <div></div>
+        <div>
+            {props.children}
+        </div>
     );
 }
 

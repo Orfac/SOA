@@ -43,28 +43,10 @@
   padding: 10px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
 .success{
   color: #99f17e;
 }
-.delete{
-  background-color: #f65e5e;
-  color: white;
-}
-.delete:hover{
-  background-color: #f12222;
-  color: white;
-  cursor: pointer;
-}
+
 .flex{
   display: flex;
 }
@@ -82,9 +64,18 @@
   margin-left: 10px;
   margin-right: 10px;
 }
-
+.delete{
+  background: #f65e5e;
+  color: white;
+}
 .cool-button:hover{
   background: #99f17e;
   color: white;
+  cursor: pointer;
+}
+.delete:hover{
+  background: #f12222;
+  color: white;
+  cursor: pointer;
 }
 

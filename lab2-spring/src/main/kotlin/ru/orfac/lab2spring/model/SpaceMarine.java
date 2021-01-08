@@ -1,15 +1,13 @@
 package ru.orfac.lab2spring.model;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
-import ru.orfac.lab2spring.model.AstartesCategory;
 import ru.orfac.lab2spring.xml.LocalDateTimeAdapter;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -17,8 +15,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.LocalDateTime;
 
@@ -26,46 +22,46 @@ import java.time.LocalDateTime;
 @JacksonXmlRootElement(localName = "SpaceMarine")
 @Entity
 public class SpaceMarine {
-  @XmlElement
+  @JacksonXmlProperty
   @Id
   @GeneratedValue
   private Long id = null;
   //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
 
-  @XmlElement
+  @JacksonXmlProperty
   @NotNull(message = "Spacemarine should have a name")
   @NotBlank(message = "Name cannot be empty")
   private String name;
 
-  @XmlElement
+  @JacksonXmlProperty
   @NotNull
   @Valid
   private Coordinates coordinates; //Поле не может быть null
 
-  @XmlElement
+  @JacksonXmlProperty
   @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
   @NotNull
   private LocalDateTime creationDate = LocalDateTime.now();
   //Поле не может быть null, Значение этого поля должно генерироваться автоматически
 
-  @XmlElement
+  @JacksonXmlProperty
   @Min(value = 1, message = "Spacemarine should have their health greater than 0")
   private Long health; //Поле может быть null, Значение поля должно быть больше 0
 
-  @XmlElement
+  @JacksonXmlProperty
   @Min(value = 1, message = "Spacemarine should have their health count greater than 0")
   @Max(value = 3, message = "Spacemarine cannot have more than 3 hearts")
   private Integer heartCount;      //Поле может быть null
 
-  @XmlElement
+  @JacksonXmlProperty
   @Enumerated(EnumType.STRING)
   private AstartesCategory category; //Поле может быть null
 
-  @XmlElement
+  @JacksonXmlProperty
   @Enumerated(EnumType.STRING)
   private MeleeWeapon meleeWeapon; //Поле может быть null
 
-  @XmlElement
+  @JacksonXmlProperty
   @Valid
   private Chapter chapter; //Поле может быть null
 
