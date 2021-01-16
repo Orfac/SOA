@@ -10,6 +10,7 @@ const Features = () => {
     const [Category, setCategory] = useState("");
     const [marines, setMarines] = useState<ISpaceMarine[]>([]);
     const [healthAmount, setHealthAmount] = useState("");
+    const[message,setMessage] = useState("");
 
     const getSummaryHealth = async () => {
         const url = Config.Url + "/health";
@@ -53,6 +54,8 @@ const Features = () => {
         const response =  await fetch(url, {
             method: "DELETE"
         });
+        setMessage(await response.text())
+
     }
 
     return (
@@ -71,10 +74,11 @@ const Features = () => {
 
             <div>
                 <div className="form-container">
-                    <h4 >Delete random</h4>
+                    <h4 >Delete random by category</h4>
                     <div>
                         <input type="text" onChange={changeCategory}/>
                         <button className="cool-button delete" onClick={deleteMarine}>Delete random</button>
+                        <div>{message? message : ""}</div>
                     </div>
                 </div>
             </div>

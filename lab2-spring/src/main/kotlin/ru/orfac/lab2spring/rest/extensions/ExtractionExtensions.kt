@@ -62,6 +62,12 @@ fun String.isEnglishAlphabet(): Boolean {
     it1 in 'a'..'z' || it1 in 'A'..'Z'
   }
 }
+fun String.isEnglishAlphabetWithUnderLineOrDots(): Boolean {
+  return this.toCharArray().all { it1 ->
+    it1 in 'a'..'z' || it1 in 'A'..'Z' || it1=='_' || it1 =='.'
+  }
+}
+
 
 private fun Map<String, String>.checkIfCollectionRequest() {
   val parameterNames = this.keys

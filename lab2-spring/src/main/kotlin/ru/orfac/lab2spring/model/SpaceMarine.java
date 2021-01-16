@@ -41,7 +41,7 @@ public class SpaceMarine {
   @JacksonXmlProperty
   @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
   @NotNull
-  private LocalDateTime creationDate = LocalDateTime.now();
+  private LocalDateTime creationDate;
   //Поле не может быть null, Значение этого поля должно генерироваться автоматически
 
   @JacksonXmlProperty

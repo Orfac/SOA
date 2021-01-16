@@ -2,14 +2,18 @@ package ru.orfac.lab2spring.service
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.dao.EmptyResultDataAccessException
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import ru.orfac.lab2spring.exceptions.NotFoundException
+import ru.orfac.lab2spring.exceptions.RequestHandlingException
 import ru.orfac.lab2spring.model.AstartesCategory
 import ru.orfac.lab2spring.model.SpaceMarine
 import ru.orfac.lab2spring.model.repositories.MarineRepository
 import ru.orfac.lab2spring.rest.extensions.PageableParameters
+import ru.orfac.lab2spring.rest.extensions.isEnglishAlphabetWithUnderLineOrDots
 import ru.orfac.lab2spring.rest.extensions.parseMarineCollectionDto
 import ru.orfac.lab2spring.service.extenstions.filterByValue
+import java.time.LocalDateTime
 import kotlin.math.min
 import kotlin.random.Random
 
@@ -24,10 +28,11 @@ class MarineService {
   }
 
   fun saveNew(spaceMarine: SpaceMarine) {
-    if (spaceMarine.id == null) {
+    if (spaceMarine.id == null && spaceMarine.creationDate == null) {
+      spaceMarine.creationDate = LocalDateTime.now()
       marineRepository.save(spaceMarine)
     } else {
-      throw RuntimeException("New marine should not have id")
+      throw RuntimeException("New marine should not have id or creation date")
     }
   }
 
@@ -38,7 +43,12 @@ class MarineService {
   fun getMarines(parameters: Map<String, String>): List<SpaceMarine> {
     val dto = parseMarineCollectionDto(parameters)
     var marines = if (dto.sortSequence != null) {
-      marineRepository.findSpaceMarinesByAttributes(dto.sortSequence)
+      val splitSequence = dto.sortSequence.split(",")
+      if (splitSequence.any { !(it.isEnglishAlphabetWithUnderLineOrDots()) }) {
+        throw RequestHandlingException("Not all elements from split sequence are english words")
+      }
+      marineRepository.findAll(Sort.by(splitSequence.map { Sort.Order(Sort.Direction.ASC, it) }))
+          .toList()
     } else getMarines()
 
     dto.filterList?.forEach { filterAndValue ->
@@ -52,7 +62,10 @@ class MarineService {
   }
 
   fun updateMarineById(id: Long, marine: SpaceMarine) {
-    var existedMarine = findById(id)
+    val existedMarine = findById(id)
+    if (marine.creationDate != existedMarine.creationDate){
+      throw RequestHandlingException("Cannot override marine creation date")
+    }
     existedMarine.category = marine.category
     existedMarine.chapter = marine.chapter
     existedMarine.coordinates = marine.coordinates

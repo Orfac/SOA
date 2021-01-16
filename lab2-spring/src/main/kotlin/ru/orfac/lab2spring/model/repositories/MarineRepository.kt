@@ -8,8 +8,6 @@ import ru.orfac.lab2spring.model.SpaceMarine
 
 interface MarineRepository : PagingAndSortingRepository<SpaceMarine, Long> {
 
-  @Query(value = "SELECT p  FROM SpaceMarine  p  ORDER BY :#{#attributes}")
-  fun findSpaceMarinesByAttributes(@Param("attributes") attributes: String): List<SpaceMarine>
   fun findAllByCategory(category: AstartesCategory): List<SpaceMarine>
   fun findAllByHealthGreaterThan(health : Long) : List<SpaceMarine>
 }
