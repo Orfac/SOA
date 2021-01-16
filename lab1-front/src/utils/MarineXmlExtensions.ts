@@ -61,7 +61,7 @@ function parseMarine(rawMarineEntity: RawMarineEntity) {
     const health = rawMarineEntity.health ? Number(rawMarineEntity.health.text) : null;
     const meleeWeapon = rawMarineEntity.meleeWeapon ? rawMarineEntity.meleeWeapon.text : "";
     const heartCount = rawMarineEntity.heartCount ? Number(rawMarineEntity.heartCount.text) : null;
-    const name = rawMarineEntity.name ? rawMarineEntity.meleeWeapon.text : "";
+    const name = rawMarineEntity.name ? rawMarineEntity.name.text : "";
 
     return {
         category: category,

@@ -1,7 +1,4 @@
 {
   "Url": "https://localhost:8443/lab2-spring-0.0.1-SNAPSHOT",
-  "Extra": "https://localhost:8444/lab2-extra-1.0-SNAPSHOT",
-  "Url2": "https://localhost:8448/lab2-spring-0.0.1-SNAPSHOT",
-  "Extra2": "https://localhost:6443/lab2-extra-1.0-SNAPSHOT",
-  "Helios_Url2": "http://localhost:8092/lab1"
+  "Extra": "https://localhost:7443/lab2-extra-1.0-SNAPSHOT"
 }

@@ -5,7 +5,8 @@ const CreateShip : React.FC = () => {
 
     const [createId, setCreateId] = useState(0)
     const [createName, setCreateName] = useState("");
-    
+    const [message, setMessage] = useState("");
+
     const changeCreateIdShip = async (e : React.FormEvent<HTMLInputElement>) => {
         setCreateId(Number(e.currentTarget.value));
     }
@@ -15,7 +16,12 @@ const CreateShip : React.FC = () => {
     }
 
     const requestCreateShip = async () => {
-        await createShip(createId, createName);
+        const apiResponse = await createShip(createId, createName);
+        if (apiResponse.status !== 200){
+            setMessage(apiResponse.errorMessage ? apiResponse.errorMessage : "")
+        } else {
+            setMessage(`Ship with id ${createId} and name ${createName} was successfully created`)
+        }
     }
     return (
         <div>
@@ -30,6 +36,7 @@ const CreateShip : React.FC = () => {
                 <div>
                     <button className="cool-button" onClick={requestCreateShip}>CREATE</button>
                 </div>
+                {message ? <div>{message}</div> : ""}
             </div>
         </div>
     )

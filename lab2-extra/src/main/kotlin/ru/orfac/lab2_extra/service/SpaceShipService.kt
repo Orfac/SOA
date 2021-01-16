@@ -6,7 +6,6 @@ import ru.orfac.lab2_extra.exceptions.RequestHandlingException
 import ru.orfac.lab2_extra.model.SpaceShip
 import ru.orfac.lab2_extra.utils.isEnglishAlphabet
 import javax.persistence.EntityManager
-import kotlin.RuntimeException
 
 object SpaceShipService {
 
@@ -15,37 +14,45 @@ object SpaceShipService {
   private val clientApi = ClientApi
 
   fun create(id: Long, name: String) {
-    if (!name.isEnglishAlphabet()) {
-      throw RequestHandlingException("Ship name should contain only english alphabet letters")
-    }
+    checkNameContainsEnglishLettersOnly(name)
+    checkShipIsNotExisted(id)
+
     val spaceShip = SpaceShip(name)
     spaceShip.id = id
 
-    entityManager.transaction.begin()
-    entityManager.persist(spaceShip)
-    entityManager.transaction.commit()
+    save(spaceShip)
   }
 
+
+
   fun update(id: Long, marineId: Long) {
-    val spaceShip = entityManager.find(SpaceShip::class.java, id)
-
+    val spaceShip = findSpaceShip(id)
     val marineIds = spaceShip.marineIds.parseMarineIds()
-    if (marineId in marineIds) {
-      throw RequestHandlingException("Marine is already loaded")
-    }
 
-    if (!clientApi.checkMarine(marineId)) {
-      throw RequestHandlingException("Marine was not found")
-    }
+    checkMarineIsNotLoadedBefore(marineId, marineIds)
+    checkMarineExists(marineId)
 
     if (marineIds.isEmpty()) {
       spaceShip.marineIds = marineId.toString()
     } else {
       spaceShip.marineIds += ",$marineId"
     }
-    entityManager.transaction.begin()
-    entityManager.persist(spaceShip)
-    entityManager.transaction.commit()
+    save(spaceShip)
+  }
+
+  private fun checkMarineIsNotLoadedBefore(
+    marineId: Long,
+    marineIds: List<Long>
+  ) {
+    if (marineId in marineIds) {
+      throw RequestHandlingException("Marine is already loaded")
+    }
+  }
+
+  private fun checkMarineExists(marineId: Long) {
+    if (!clientApi.checkMarine(marineId)) {
+      throw RequestHandlingException("Marine was not found")
+    }
   }
 
   fun get(): List<SpaceShip> {
@@ -54,9 +61,32 @@ object SpaceShipService {
     return list.sortedBy { it.id }
   }
 
+  private fun findSpaceShip(id: Long): SpaceShip {
+    return entityManager.find(SpaceShip::class.java, id)
+      ?: throw RequestHandlingException("Spaceship with id $id doesn't exist")
+  }
+
+  private fun checkShipIsNotExisted(id: Long) {
+    val existedSpaceShip = entityManager.find(SpaceShip::class.java, id)
+    if (existedSpaceShip != null) {
+      throw RequestHandlingException("Ship with id $id already existed")
+    }
+  }
+
+  private fun checkNameContainsEnglishLettersOnly(name: String) {
+    if (!name.isEnglishAlphabet()) {
+      throw RequestHandlingException("Ship name should contain only english alphabet letters")
+    }
+  }
   private fun String.parseMarineIds(): List<Long> {
     if (this.isEmpty()) return emptyList()
     return this.split(",").map { it.toLong() }
+  }
+
+  private fun save(spaceShip: SpaceShip) {
+    entityManager.transaction.begin()
+    entityManager.persist(spaceShip)
+    entityManager.transaction.commit()
   }
 
 }

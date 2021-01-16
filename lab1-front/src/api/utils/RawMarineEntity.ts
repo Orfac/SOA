@@ -7,6 +7,6 @@ export interface RawMarineEntity {
     health: { text: never; };
     meleeWeapon: { text: never; };
     heartCount: { text: never; };
-    name: never;
+    name: {text: never;};
     xmlText: string;
 }

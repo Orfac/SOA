@@ -54,13 +54,14 @@ const MarineList: React.FC = () => {
         const updatedMarinesResponse = await getMarines(url);
         let updatedMarines: Array<ISpaceMarine> = [];
         const responseText = await updatedMarinesResponse.text();
+        console.log("asdas");
         if (updatedMarinesResponse.status === 200) {
             updatedMarines = handleXml(responseText);
             if (updatedMarines.length < 1) {
                 onError("There are 0 space marines");
             }
         } else {
-            onError(message);
+            onError(responseText);
         }
 
         setMarines(updatedMarines);
@@ -145,7 +146,7 @@ const MarineList: React.FC = () => {
                 </div> : renderMarines()}
             </div>
 
-            {message ? <div className={isError ? "error-message" : "success"}>{message}</div> : ""}
+            {message ? <div >{message}</div> : ""}
 
 
         </div>

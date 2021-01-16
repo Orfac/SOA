@@ -2,6 +2,7 @@
   "name": "lab1-front",
   "version": "0.1.0",
   "private": true,
+  "homepage": "~s242395",
   "dependencies": {
     "node-sass": "^4.14.1",
     "xml-js": "^1.6.11",
