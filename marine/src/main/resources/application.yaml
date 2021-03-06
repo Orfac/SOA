@@ -1,10 +1,4 @@
 server:
-#  ssl:
-#    key-store-type:  JKS
-#    key-store: classpath:soa.jks
-#    key-store-password: secret
-#    key-alias: localhost
-#    enabled: true
   port: ${port:8082}
 
 spring:
@@ -14,7 +8,6 @@ spring:
     zookeeper:
       discovery:
         enabled: true
-#        instance-ssl-port: ${port:8082}
 
   # Data creds
   datasource:
