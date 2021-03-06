@@ -52,14 +52,14 @@ function parseMarine(rawMarineEntity: RawMarineEntity) {
         chapter = parseChapter(rawMarineEntity.chapter)
     }
     const id = rawMarineEntity.id.text;
-    const category = rawMarineEntity.category.text;
+    const category = rawMarineEntity.category.text ? rawMarineEntity.category.text : "Null category";
     const coordinates = {
         x: rawMarineEntity.coordinates.x.text,
         y: rawMarineEntity.coordinates.y.text
     };
-    const creationDate = rawMarineEntity.creationDate ? rawMarineEntity.creationDate.text : "";
+    const creationDate = rawMarineEntity.creationDate ? new Date(rawMarineEntity.creationDate.text).toLocaleString() : "";
     const health = rawMarineEntity.health ? Number(rawMarineEntity.health.text) : null;
-    const meleeWeapon = rawMarineEntity.meleeWeapon ? rawMarineEntity.meleeWeapon.text : "";
+    const meleeWeapon = rawMarineEntity.meleeWeapon ? rawMarineEntity.meleeWeapon.text : "no weapon";
     const heartCount = rawMarineEntity.heartCount ? Number(rawMarineEntity.heartCount.text) : null;
     const name = rawMarineEntity.name ? rawMarineEntity.name.text : "";
 

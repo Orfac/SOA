@@ -43,13 +43,18 @@ const SpaceMarine: React.FC<IProps> = (props: IProps) => {
 
     };
 
+    const renderHealthMessage = marine.health ? `health=${marine.health}` : "";
+    const renderHeartCountMessage = marine.heartCount ? `heartCount=${marine.heartCount}` : "";
     return (
         <div className="marine-container">
             <div className="header">
                 <button className="cool-button delete" onClick={sendDelete}>
                     Delete
                 </button>
-                <h2 className="main-header">{marine.name} №{marine.id}</h2>
+                <div>
+                    <h2 className="main-header">{marine.name} №{marine.id}</h2>
+                </div>
+
 
                 <button className="cool-button edit" onClick={editOpen}>
                     Edit
@@ -66,7 +71,12 @@ const SpaceMarine: React.FC<IProps> = (props: IProps) => {
                         Update {marine.name}
                     </button>
                 </div> :
-                <div className="info-container">
+                <div>
+
+                    <div><b>{marine.category}</b> with <b>{marine.meleeWeapon}</b></div>
+                    <div>Creation date: {marine.creationDate}</div>
+                    <div>Coordinates: {marine.coordinates.x ? `x=${marine.coordinates.x}` : ""} y={marine.coordinates.y} </div>
+                    <div>Health information: {renderHealthMessage} {renderHeartCountMessage}</div>
                     {chapter !== null ? <div className="chapter-info">
                             <h2>Chapter</h2>
                             <div>chapter = {chapter.name}</div>
@@ -77,30 +87,12 @@ const SpaceMarine: React.FC<IProps> = (props: IProps) => {
                         <div className="chapter-info">
                             Chapter is missing
                         </div>}
-                    <div className="main-info">
-                        <h2>Main</h2>
-
-                        <div>coordinates - X = {marine.coordinates.x};</div>
-                        <div>coordinates - Y = {marine.coordinates.y};</div>
-                        <div>creation date = {marine.creationDate}</div>
-
-
-                    </div>
-
-                    <div className="additional-info">
-                        <h2>Additional</h2>
-                        <div>category = {marine.category}</div>
-                        <div>health = {marine.health}</div>
-                        <div>melee weapon = {marine.meleeWeapon}</div>
-                        <div>heart count = {marine.heartCount}</div>
-                    </div>
-                </div>}
-
-            {error ?
-                <div className="little-error-message">
-                    {error}
                 </div>
-                : ""}
+            }
+
+            <div className="little-error-message">
+                {error}
+            </div>
 
         </div>
     );

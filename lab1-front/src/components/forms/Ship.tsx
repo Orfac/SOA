@@ -1,21 +1,21 @@
 import React, {useState} from 'react';
-import Config from "../../api/Config.json";
-import { loadNewMarine } from '../../api/ship-api';
+import {getShips} from '../../api/ship-api';
 import { IShip } from '../../model/IShip';
 import CreateShip from '../ship/CreateShip';
 import LoadMarine from "../ship/LoadMarine";
 
 const Ship : React.FC = () => {
 
-    const [buildedShips, setBuildedShips] = useState([]);
+    const [buildedShips, setBuildedShips] = useState<IShip[]>([]);
 
     async function showShips() {
-        const url = `${Config.Extra}/get`;
-        const response = await fetch(url, {
-            method: "GET"
-        });
-        const json = await response.json();
-        setBuildedShips(json);
+        const json = await getShips();
+        console.log(json);
+        if (json.result == null){
+            setBuildedShips([]);
+        } else {
+            setBuildedShips(json.result);
+        }
     }
 
 

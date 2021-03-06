@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import SpaceMarine from "../SpaceMarine";
 import Config from '../../api/Config.json';
 import './FormStyle.css';
-import {getMarines, save} from "../../api/marines-api";
-import {handleXml} from "../../utils/MarineXmlExtensions";
-import {ISpaceMarine} from "../../model/ISpaceMarine";
+import { getMarines, save } from "../../api/marines-api";
+import { handleXml } from "../../utils/MarineXmlExtensions";
+import { ISpaceMarine } from "../../model/ISpaceMarine";
 
 
 const MarineList: React.FC = () => {
@@ -23,7 +23,7 @@ const MarineList: React.FC = () => {
 
     const renderMarines = (): JSX.Element[] => {
         return marines.map((value: ISpaceMarine, index: number): JSX.Element =>
-            <SpaceMarine key={index} marine={value} callForUpdate={reUpdateMarines}/>
+            <SpaceMarine key={index} marine={value} callForUpdate={reUpdateMarines} />
         );
     }
 
@@ -49,12 +49,11 @@ const MarineList: React.FC = () => {
         setMessage("");
         setIsError(false);
         setAddOpen(false);
-
+        setMarines([]);
         const url = buildUrl()
         const updatedMarinesResponse = await getMarines(url);
         let updatedMarines: Array<ISpaceMarine> = [];
         const responseText = await updatedMarinesResponse.text();
-        console.log("asdas");
         if (updatedMarinesResponse.status === 200) {
             updatedMarines = handleXml(responseText);
             if (updatedMarines.length < 1) {
@@ -90,14 +89,13 @@ const MarineList: React.FC = () => {
     const sendNew = async () => {
         setMessage("");
         setIsError(false);
-        const rawResponse = await save(addValue);
-        if (rawResponse.status === 201) {
+        const apiResponse = await save(addValue);
+        if (apiResponse.status === 201) {
             setMessage("New marine added!");
         } else {
-            if (rawResponse.status === 400) {
+            if (apiResponse.status === 400) {
                 setIsError(true);
-                const response = await rawResponse.text();
-                setMessage(response ? response : "Cannot add this marine, please rewrite it in xml style");
+                setMessage(apiResponse.errorMessage ? apiResponse.errorMessage : "Cannot add this marine, please rewrite it in xml style");
             }
         }
     }
@@ -114,20 +112,20 @@ const MarineList: React.FC = () => {
                     <div>
                         <div>
                             Page size
-                            <input type="text" onChange={inputPageSize} placeholder="1"/>
+                            <input type="text" onChange={inputPageSize} placeholder="1" />
                         </div>
                         <div>
                             Page number
-                            <input type="text" onChange={inputPageNumber} placeholder="1"/>
+                            <input type="text" onChange={inputPageNumber} placeholder="1" />
                         </div>
                     </div>
                     <div>
                         Filter by
-                        <input type="text" onChange={inputFilter} placeholder="name=vasya&id=1"/>
+                        <input type="text" onChange={inputFilter} placeholder="name=vasya&id=1" />
                     </div>
                     <div>
                         Sort by
-                        <input type="text" onChange={inputSort} placeholder="name,id"/>
+                        <input type="text" onChange={inputSort} placeholder="name,id" />
                     </div>
                 </div>}
             </div>
@@ -137,7 +135,7 @@ const MarineList: React.FC = () => {
                 {isAddOpen ? <div>
                     <h2>XML view</h2>
 
-                    <textarea cols={60} rows={20} onChange={updateNew}/>
+                    <textarea cols={60} rows={20} onChange={updateNew} />
                     <div>
                         <button className="cool-button" onClick={sendNew}>
                             Load new marine

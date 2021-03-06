@@ -1,5 +1,6 @@
 package ru.orfac.lab2_extra.exceptions
 
+import ru.orfac.shared.RequestHandlingException
 import javax.ws.rs.core.Response
 import javax.ws.rs.ext.ExceptionMapper
 import javax.ws.rs.ext.Provider

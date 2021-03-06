@@ -1,0 +1,15 @@
+server:
+  ssl:
+    key-store-type:  JKS
+    key-store: classpath:soa.jks
+    key-store-password: secret
+    key-alias: localhost
+    enabled: true
+  port: ${port:8443}
+spring:
+  application:
+    name: MainConsumer
+  cloud:
+    zookeeper:
+      discovery:
+        enabled: true

@@ -1,4 +1,5 @@
 import Config from '../api/Config.json';
+import { ApiResponse } from './api-response';
 
 export async function deleteById(id: number): Promise<Response> {
     const url = Config.Url + "/marines" + "/" + id;
@@ -24,13 +25,24 @@ export async function updateById(id: number, text: string): Promise<Response> {
     });
 }
 
-export async function save(text: string): Promise<Response> {
+export async function save(text: string): Promise<ApiResponse<void>> {
     const url = `${Config.Url}/marines`;
-    return await fetch(url, {
+    const response = await fetch(url, {
         method: "POST",
         body: text,
         headers: {
             "Content-Type": "application/xml"
         }
     });
+
+    let errorMessage = "";
+    if (response.status !== 201){
+        errorMessage = await response.text();
+    }
+    
+    return {
+        errorMessage:errorMessage,
+        result: null,
+        status: response.status
+    };
 }

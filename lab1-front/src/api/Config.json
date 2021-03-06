@@ -1,4 +1,6 @@
 {
-  "Url": "https://localhost:8443/lab2-spring-0.0.1-SNAPSHOT",
-  "Extra": "https://localhost:7443/lab2-extra-1.0-SNAPSHOT"
+  "Url2": "https://localhost:8443/lab2-spring-0.0.1-SNAPSHOT",
+  "Url": "https://localhost:8443",
+  "Extra": "https://localhost:8444/lab2-extra-1.0-SNAPSHOT",
+  "Extra1": "https://localhost:7443/lab2-extra-1.0-SNAPSHOT"
 }
